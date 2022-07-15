@@ -3,14 +3,14 @@ import { useState } from 'react';
 import useAuth from '../../context/Auth.context';
 import { TextInput, Container, Text, Button } from '@mantine/core';
 
-export default function Login() {
+export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { login } = useAuth();
+  const { signIn } = useAuth();
 
   const handleLogin = () => {
-    login(email, password);
+    signIn(email, password);
   };
 
   return (

@@ -18,7 +18,7 @@ export function AuthContextProvider({ children }) {
     }
   }, []);
 
-  const login = async (email, password) => {
+  const signIn = async (email, password) => {
     try {
       const { data } = await axios.post('auth/sign_in', {
         email,
@@ -40,7 +40,7 @@ export function AuthContextProvider({ children }) {
 
   const value = {
     token,
-    login,
+    signIn,
     logout,
   };
 
