@@ -1,42 +1,18 @@
 import React from 'react';
 import { useState } from 'react';
-import axios from 'axios';
+import useAuth from '../../context/Auth.context';
 import { TextInput, Container, Text, Button } from '@mantine/core';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const login = async () => {
-    try {
-      const { data } = await axios.post('auth/sign_in', {
-        email,
-        password,
-      });
+  const { login } = useAuth();
 
-      axios.defaults.headers.common.Authorization = `Bearer ${data.token}`;
-
-      localStorage.setItem('token', data.token);
-
-      console.log(data);
-    } catch (e) {
-      console.log(e.message);
-    }
+  const handleLogin = () => {
+    login(email, password);
   };
 
-  const getTours = async () => {
-    try {
-      const { data } = await axios.get('tours');
-      console.log(data);
-    } catch (e) {
-      console.log(e.response.data);
-    }
-  };
-
-  const logout = () => {
-    localStorage.removeItem('token');
-    axios.defaults.headers.common.Authorization = null;
-  };
   return (
     <Container
       style={{
@@ -69,23 +45,9 @@ export default function Login() {
       <Button
         variant='gradient'
         gradient={{ from: 'indigo', to: 'cyan' }}
-        onClick={login}
+        onClick={handleLogin}
       >
         Login
-      </Button>
-      <Button
-        variant='gradient'
-        gradient={{ from: 'indigo', to: 'cyan' }}
-        onClick={getTours}
-      >
-        GET TOURS
-      </Button>
-      <Button
-        variant='gradient'
-        gradient={{ from: 'indigo', to: 'cyan' }}
-        onClick={logout}
-      >
-        Logout
       </Button>
     </Container>
   );
