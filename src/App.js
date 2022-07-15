@@ -12,6 +12,8 @@ function App() {
   const [t_4, setT_4] = useState(false);
   const [t_5, setT_5] = useState(false);
 
+  const [obj, setObj] = useState({});
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -27,55 +29,67 @@ function App() {
     setT_5(false);
   };
 
+  const click = (para) => {
+    //` 't-3'
+    setObj({
+      [para]: obj[para] ? false : true,
+    }); //`  {t-3: true}
+  };
+  const val = '';
+
+  const object = {
+    name: 'Mantine',
+    [val]: 22,
+  };
+
+  const property = 'name';
+  console.log(object.name);
+  console.log(object[property]);
+
   return (
     <Container>
       <Button
         onClick={() => {
-          falser();
-          setT_1(!t_1);
+          click('t_1');
         }}
       >
         T-1
       </Button>
       <Button
         onClick={() => {
-          falser();
-          setT_2(!t_2);
+          click('t_2');
         }}
       >
         T-2
       </Button>
       <Button
         onClick={() => {
-          falser();
-          setT_3(!t_3);
+          click('t_3');
         }}
       >
         T-3
       </Button>
       <Button
         onClick={() => {
-          falser();
-          setT_4(!t_4);
+          click('t_4');
         }}
       >
         T-4
       </Button>
       <Button
         onClick={() => {
-          falser();
-          setT_5(!t_5);
+          click('t_5');
         }}
       >
         T-5
       </Button>
 
       <div>
-        {t_1 ? <Paper>T-1</Paper> : null}
-        {t_2 ? <Paper>T-2</Paper> : null}
-        {t_3 ? <Paper>T-3</Paper> : null}
-        {t_4 ? <Paper>T-4</Paper> : null}
-        {t_5 ? <Paper>T-5</Paper> : null}
+        {obj.t_1 ? <Paper>T-1</Paper> : null}
+        {obj.t_2 ? <Paper>T-2</Paper> : null}
+        {obj.t_3 ? <Paper>T-3</Paper> : null}
+        {obj.t_4 ? <Paper>T-4</Paper> : null}
+        {obj.t_5 ? <Paper>T-5</Paper> : null}
       </div>
     </Container>
   );
