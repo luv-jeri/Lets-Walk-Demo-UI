@@ -1,92 +1,86 @@
-import './App.css';
-import { useState } from 'react';
-import { TextInput, Container, Text, Button } from '@mantine/core';
-import axios from 'axios';
+import Auth from './pages/auth/index';
+import Application from './pages/app/index';
+import { useState, useEffect } from 'react';
+import { Button, Container, Paper } from '@mantine/core';
 
 function App() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [token, setToken] = useState(null);
 
-  const login = async () => {
-    try {
-      const { data } = await axios.post(
-        'http://localhost:8000/api/v1/auth/sign_in',
-        {
-          email,
-          password,
-        },
-        {
-          withCredentials: true,
-        }
-      );
+  const [t_1, setT_1] = useState(false);
+  const [t_2, setT_2] = useState(false);
+  const [t_3, setT_3] = useState(false);
+  const [t_4, setT_4] = useState(false);
+  const [t_5, setT_5] = useState(false);
 
-      localStorage.setItem('token', data.token);
-
-      console.log(data);
-    } catch (e) {
-      console.log(e.message);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setToken(token);
     }
+  }, []);
+
+  const falser = () => {
+    setT_1(false);
+    setT_2(false);
+    setT_3(false);
+    setT_4(false);
+    setT_5(false);
   };
 
-  const getTours = async () => {
-    try {
-      const { data } = await axios.get('http://localhost:8000/api/v1/tours', {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      console.log(data);
-    } catch (e) {
-      console.log(e.response.data);
-    }
-  };
   return (
-    <Container
-      style={{
-        height: '30vh',
-        width: '50vw',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        alignItems: 'stretch',
-      }}
-    >
-      <Text size='xl' weight={700}>
-        LOGIN
-      </Text>
-      <TextInput
-        placeholder='Email Address'
-        required
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-      />
-      <TextInput
-        placeholder='Password'
-        type='password'
-        required
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-      />
+    <Container>
       <Button
-        variant='gradient'
-        gradient={{ from: 'indigo', to: 'cyan' }}
-        onClick={login}
+        onClick={() => {
+          falser();
+          setT_1(!t_1);
+        }}
       >
-        Login
+        T-1
       </Button>
       <Button
-        variant='gradient'
-        gradient={{ from: 'indigo', to: 'cyan' }}
-        onClick={getTours}
+        onClick={() => {
+          falser();
+          setT_2(!t_2);
+        }}
       >
-        GET TOURS
+        T-2
       </Button>
+      <Button
+        onClick={() => {
+          falser();
+          setT_3(!t_3);
+        }}
+      >
+        T-3
+      </Button>
+      <Button
+        onClick={() => {
+          falser();
+          setT_4(!t_4);
+        }}
+      >
+        T-4
+      </Button>
+      <Button
+        onClick={() => {
+          falser();
+          setT_5(!t_5);
+        }}
+      >
+        T-5
+      </Button>
+
+      <div>
+        {t_1 ? <Paper>T-1</Paper> : null}
+        {t_2 ? <Paper>T-2</Paper> : null}
+        {t_3 ? <Paper>T-3</Paper> : null}
+        {t_4 ? <Paper>T-4</Paper> : null}
+        {t_5 ? <Paper>T-5</Paper> : null}
+      </div>
     </Container>
   );
 }
 
 export default App;
+
+//  return <>{check ? <Application /> : <Auth />}</>;
