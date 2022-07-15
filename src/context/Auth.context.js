@@ -1,6 +1,5 @@
-import { useContext, createContext, useState, useLayoutEffect, useEffect } from 'react';
+import { useContext, createContext, useState, useLayoutEffect } from 'react';
 import axios from 'axios';
-import { Loader } from '@mantine/core';
 
 const AuthContext = createContext();
 
@@ -15,6 +14,7 @@ export function AuthContextProvider({ children }) {
     const token = localStorage.getItem('token');
     if (token) {
       setToken(token);
+      axios.defaults.headers.common.Authorization = 'Bearer ' + token;
     }
   }, []);
 
@@ -32,9 +32,16 @@ export function AuthContextProvider({ children }) {
     }
   };
 
+  const logout = () => {
+    setToken(null);
+    localStorage.removeItem('token');
+    axios.defaults.headers.common.Authorization = null;
+  };
+
   const value = {
     token,
     login,
+    logout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
