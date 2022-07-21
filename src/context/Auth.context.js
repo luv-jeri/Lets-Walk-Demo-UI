@@ -11,8 +11,18 @@ export function AuthContextProvider({ children }) {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
 
+  const set = (token) => {
+    setToken(token);
+    axios.defaults.headers.common.Authorization = 'Bearer ' + token;
+
+    axios.get('auth/whoami').then((res) => {
+      setUser(res.data.data);
+    });
+  };
+
   useLayoutEffect(() => {
     const token = localStorage.getItem('token');
+
     if (token) {
       setToken(token);
       axios.defaults.headers.common.Authorization = 'Bearer ' + token;
@@ -23,8 +33,6 @@ export function AuthContextProvider({ children }) {
     }
   }, []);
 
-  console.log(user);
-
   const signIn = async (email, password) => {
     try {
       const { data } = await axios.post('auth/sign_in', {
@@ -32,7 +40,7 @@ export function AuthContextProvider({ children }) {
         password,
       });
 
-      setToken(data.token);
+      set(data.token);
       localStorage.setItem('token', data.token);
     } catch (e) {
       console.log(e);
@@ -46,7 +54,7 @@ export function AuthContextProvider({ children }) {
         phone: `+91${params.phone}`,
       });
 
-      setToken(data.token);
+      set(data.token);
       localStorage.setItem('token', data.token);
     } catch (e) {
       console.log(e);
@@ -64,6 +72,7 @@ export function AuthContextProvider({ children }) {
     signIn,
     join,
     logout,
+    user,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
