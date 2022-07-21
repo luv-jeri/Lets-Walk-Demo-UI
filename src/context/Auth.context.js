@@ -1,4 +1,4 @@
-import { useContext, createContext, useState, useLayoutEffect } from 'react';
+import { useContext, createContext, useState, useLayoutEffect, useEffect } from 'react';
 import axios from 'axios';
 
 const AuthContext = createContext();
@@ -9,20 +9,41 @@ const useAuth = () => {
 
 export function AuthContextProvider({ children }) {
   const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null);
 
   useLayoutEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       setToken(token);
       axios.defaults.headers.common.Authorization = 'Bearer ' + token;
+
+      axios.get('auth/whoami').then((res) => {
+        setUser(res.data.data);
+      });
     }
   }, []);
+
+  console.log(user);
 
   const signIn = async (email, password) => {
     try {
       const { data } = await axios.post('auth/sign_in', {
         email,
         password,
+      });
+
+      setToken(data.token);
+      localStorage.setItem('token', data.token);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const join = async (params) => {
+    try {
+      const { data } = await axios.post('auth/sign_up', {
+        ...params,
+        phone: `+91${params.phone}`,
       });
 
       setToken(data.token);
@@ -41,6 +62,7 @@ export function AuthContextProvider({ children }) {
   const value = {
     token,
     signIn,
+    join,
     logout,
   };
 

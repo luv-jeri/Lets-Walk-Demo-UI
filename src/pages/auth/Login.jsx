@@ -2,10 +2,13 @@ import React from 'react';
 import { useState } from 'react';
 import useAuth from '../../context/Auth.context';
 import { TextInput, Container, Text, Button } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 
-export default function SignIn() {
+export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
 
   const { signIn } = useAuth();
 
@@ -49,6 +52,21 @@ export default function SignIn() {
       >
         Login
       </Button>
+      <Text
+        style={{
+          marginTop: '1rem',
+          textAlign: 'center',
+          border: '1px #FEFBF6 solid',
+          paddingBlock: '0.5rem',
+          borderRadius: '0.5rem',
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+          navigate('/join');
+        }}
+      >
+        JOIN
+      </Text>
     </Container>
   );
 }
